@@ -1,0 +1,52 @@
+[package]
+name = "railhead"
+version = "0.1.0"
+edition = "2024"
+description = "A terminal railway-network builder and simulator."
+license-file = "LICENSE"
+build = "build.rs"
+publish = false
+
+[dependencies]
+# line_count: the side panel knows when it overflows (and scrolls)
+ratatui = { version = "0.30.2", features = ["unstable-rendered-line-info"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = { version = "1.0.154", features = ["float_roundtrip"] }
+# Synthesized music and sound (no decoders, no asset files). Build without it
+# with `--no-default-features` (e.g. on Linux without ALSA headers).
+rodio = { version = "0.23.0", default-features = false, features = [
+    "playback",
+], optional = true }
+# The game's own window (`--terminal` runs it in a terminal instead): a
+# software-drawn character grid, so it still looks like a terminal game.
+winit = { version = "0.30.13", optional = true }
+softbuffer = { version = "0.4.8", optional = true }
+fontdue = { version = "0.9.4", optional = true }
+png = { version = "0.18.1", optional = true }
+unicode-width = { version = "0.2.2", optional = true }
+
+[features]
+default = ["audio", "window"]
+audio = ["dep:rodio"]
+window = [
+    "dep:winit",
+    "dep:softbuffer",
+    "dep:fontdue",
+    "dep:png",
+    "dep:unicode-width",
+]
+
+# Windows: build.rs compiles the icon and version info into railhead.exe.
+[build-dependencies]
+embed-resource = "3.0.12"
+
+[workspace]
+members = ["xtask"]
+
+# Release packages (`cargo xtask dist`): smaller and a little faster than
+# plain --release, at the cost of a slower build.
+[profile.dist]
+inherits = "release"
+lto = true
+codegen-units = 1
+strip = true

@@ -1,0 +1,3 @@
+[alias]
+# `cargo xtask icons` redraws assets/icons; `cargo xtask dist` packages a release.
+xtask = "run --quiet --package xtask --"

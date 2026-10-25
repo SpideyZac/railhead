@@ -1,0 +1,10 @@
+[package]
+name = "xtask"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# Developer tool: draws the icons and packages releases.
+# Run it with `cargo xtask <command>` (alias in .cargo/config.toml).
+[dependencies]
+png = "0.18.1"

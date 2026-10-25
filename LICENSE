@@ -1,0 +1,80 @@
+# Proprietary Source-Available License
+
+**Copyright (c) 2026 Zachary Lesser. All rights reserved.**
+
+## 1. Definitions
+
+"Software" means the source code, object code, executables, game builds, and associated software components of this project.
+
+"Author" means the copyright holder identified above.
+
+"Recipient" means any person or entity accessing, viewing, or obtaining the Software.
+
+## 2. Copyright and Ownership
+
+The Software is proprietary and is not distributed under an open-source license. The Author retains all rights, title, and interest in the Software, including all applicable intellectual property rights.
+
+Making the source code publicly accessible does not grant any rights except those expressly stated in this License.
+
+## 3. Permission to View
+
+The Recipient is granted a limited, non-exclusive, non-transferable, revocable permission to access and view the publicly available source code for personal inspection and educational purposes.
+
+This permission does not grant the right to use the Software beyond the scope expressly permitted by this License.
+
+## 4. Restrictions
+
+Except where expressly authorized in writing by the Author or required by applicable law, the Recipient may not:
+
+- Copy, republish, mirror, redistribute, sublicense, or otherwise make the source code available to others outside the authorized hosting service.
+- Distribute, upload, share, sell, sublicense, or otherwise provide copies of the Software's official or modified releases to others.
+- Publish compiled builds, binaries, or other substantial portions of the Software.
+- Create, distribute, or commercially exploit derivative works based on the Software.
+- Remove or alter copyright notices, ownership notices, or license terms.
+- Use the Software or its contents to misrepresent an unofficial version as an official release.
+
+Access to a public repository does not constitute permission to redistribute its contents.
+
+## 5. Paid Releases
+
+Official releases may be made available for purchase under separate terms established by the Author.
+
+Purchasing or obtaining an authorized release grants only the rights expressly provided by the applicable purchase terms. It does not grant ownership of the Software or permission to redistribute it.
+
+The Author may change pricing, release availability, and distribution methods for future releases.
+
+## 6. Contributions
+
+No contribution, pull request, patch, or other submission grants the Recipient additional rights to the Software.
+
+Any contributions accepted by the Author must be submitted under contribution terms agreed upon by the parties. The Author may require a separate contribution agreement or explicit licensing permission before accepting contributions.
+
+## 7. Third-Party Components
+
+Components, libraries, assets, and other materials owned by third parties remain subject to their respective licenses and terms. This License does not override third-party rights or grant rights the Author does not possess.
+
+## 8. Termination
+
+Any permission granted under this License terminates automatically if the Recipient materially violates its terms, subject to applicable law. Upon termination, the Recipient must cease activities requiring permission under this License.
+
+Termination does not eliminate rights or obligations that cannot legally be terminated.
+
+## 9. Disclaimer of Warranty
+
+To the maximum extent permitted by applicable law, the Software is provided "AS IS," without warranties of any kind, express or implied, including warranties of merchantability, fitness for a particular purpose, and non-infringement.
+
+## 10. Limitation of Liability
+
+To the maximum extent permitted by applicable law, the Author shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from the access to or use of the Software.
+
+Nothing in this License excludes liability that cannot lawfully be excluded.
+
+## 11. Governing Law
+
+This License shall be governed by the laws of Washington State, excluding conflict-of-law rules, to the extent permitted by applicable law.
+
+## 12. Entire Agreement
+
+This License constitutes the terms governing access to and use of the Software, except where separate written agreements or mandatory applicable law provide otherwise.
+
+For licensing inquiries or written permission to use, redistribute, or commercially exploit the Software, contact: zacmlesser-7@outlook.com.

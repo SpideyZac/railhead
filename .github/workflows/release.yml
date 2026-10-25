@@ -1,0 +1,46 @@
+# Builds Railhead for Windows, macOS (Apple Silicon and Intel) and Linux and
+# packages each with `cargo xtask dist`. Runs on version tags (v0.2.0) or by
+# hand from the Actions tab; the packages are attached to the run, and to a
+# draft GitHub release for tags.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: windows-latest, dist: windows }
+          - { os: macos-latest, dist: macos }
+          - { os: macos-13, dist: macos }
+          - { os: ubuntu-22.04, dist: linux }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Linux sound headers
+        if: matrix.dist == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev
+      - name: Test
+        run: cargo test --release
+      - name: Package
+        run: cargo xtask dist --os ${{ matrix.dist }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: railhead-${{ matrix.dist }}-${{ matrix.os }}
+          path: |
+            dist/*.zip
+            dist/*.tar.gz
+      - name: Draft release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: |
+            dist/*.zip
+            dist/*.tar.gz

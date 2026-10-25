@@ -1,46 +1,71 @@
-# Builds Railhead for Windows, macOS (Apple Silicon and Intel) and Linux and
-# packages each with `cargo xtask dist`. Runs on version tags (v0.2.0) or by
-# hand from the Actions tab; the packages are attached to the run, and to a
-# draft GitHub release for tags.
 name: release
 
 on:
-  push:
-    tags: ["v*"]
-  workflow_dispatch:
+    push:
+        tags: ["v*"]
+    workflow_dispatch:
 
 jobs:
-  package:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { os: windows-latest, dist: windows }
-          - { os: macos-latest, dist: macos }
-          - { os: macos-13, dist: macos }
-          - { os: ubuntu-22.04, dist: linux }
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - name: Linux sound headers
-        if: matrix.dist == 'linux'
-        run: sudo apt-get update && sudo apt-get install -y libasound2-dev
-      - name: Test
-        run: cargo test --release
-      - name: Package
-        run: cargo xtask dist --os ${{ matrix.dist }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: railhead-${{ matrix.dist }}-${{ matrix.os }}
-          path: |
-            dist/*.zip
-            dist/*.tar.gz
-      - name: Draft release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: true
-          files: |
-            dist/*.zip
-            dist/*.tar.gz
+    package:
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - { os: windows-latest, dist: windows }
+                    - { os: macos-latest, dist: macos }
+                    - { os: macos-13, dist: macos }
+                    - { os: ubuntu-22.04, dist: linux }
+
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: dtolnay/rust-toolchain@stable
+
+            - name: Linux sound headers
+              if: matrix.dist == 'linux'
+              run: sudo apt-get update && sudo apt-get install -y libasound2-dev
+
+            - name: Test
+              run: cargo test --release
+
+            - name: Package
+              run: cargo xtask dist --os ${{ matrix.dist }}
+
+            - name: Install encryption dependency
+              run: python -m pip install cryptography
+
+            - name: Encrypt packages
+              shell: python
+              env:
+                  ASSET_ENCRYPTION_KEY: ${{ secrets.ASSET_ENCRYPTION_KEY }}
+              run: |
+                    import os
+                    import secrets
+                    from pathlib import Path
+                    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+                    key = bytes.fromhex(os.environ["ASSET_ENCRYPTION_KEY"])
+                    if len(key) != 32:
+                        raise ValueError("Encryption key must be 32 bytes (64 hex characters)")
+
+                    aes = AESGCM(key)
+                    files = list(Path("dist").glob("*.zip"))
+                    files += list(Path("dist").glob("*.tar.gz"))
+
+                    if not files:
+                        raise RuntimeError("No packages found in dist/")
+
+                    for path in files:
+                        nonce = secrets.token_bytes(12)
+                        ciphertext = aes.encrypt(nonce, path.read_bytes(), None)
+                        encrypted_path = path.with_name(path.name + ".enc")
+                        encrypted_path.write_bytes(nonce + ciphertext)
+                        path.unlink()
+
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: railhead-${{ matrix.dist }}-${{ matrix.os }}
+                  path: dist/*.enc
+                  if-no-files-found: error

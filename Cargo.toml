@@ -1,6 +1,6 @@
 [package]
 name = "railhead"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "A terminal railway-network builder and simulator."
 license-file = "LICENSE"

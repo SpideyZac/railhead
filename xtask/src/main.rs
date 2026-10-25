@@ -357,12 +357,14 @@ fn dist(root: &Path, os: &str, bin: Option<PathBuf>, no_build: bool) -> Result<(
     fs::create_dir_all(&stage).map_err(|e| e.to_string())?;
     let icons = root.join("assets/icons");
     let font_licence = root.join("assets/fonts/LICENSE-DejaVu.txt");
+    let license = root.join("LICENSE");
     let archive;
     match os {
         "windows" => {
             copy(&bin, &stage.join("Railhead.exe"))?;
             write(&stage.join("README.txt"), &README.replace('\n', "\r\n"))?;
             copy(&font_licence, &stage.join("LICENSE-DejaVu.txt"))?;
+            copy(&license, &stage.join("LICENSE.txt"))?;
             archive = out.join(format!("{name}.zip"));
             let _ = fs::remove_file(&archive);
             // bsdtar ships with Windows 10+ and writes zips with -a
@@ -384,6 +386,7 @@ fn dist(root: &Path, os: &str, bin: Option<PathBuf>, no_build: bool) -> Result<(
             write(&app.join("Info.plist"), &info_plist(&ver))?;
             write(&stage.join("README.txt"), README)?;
             copy(&font_licence, &stage.join("LICENSE-DejaVu.txt"))?;
+            copy(&license, &stage.join("LICENSE.txt"))?;
             archive = out.join(format!("{name}.zip"));
             let _ = fs::remove_file(&archive);
             if cfg!(target_os = "macos") {
@@ -415,6 +418,7 @@ fn dist(root: &Path, os: &str, bin: Option<PathBuf>, no_build: bool) -> Result<(
             make_executable(&stage.join("install.sh"))?;
             write(&stage.join("README.txt"), README)?;
             copy(&font_licence, &stage.join("LICENSE-DejaVu.txt"))?;
+            copy(&license, &stage.join("LICENSE.txt"))?;
             archive = out.join(format!("{name}.tar.gz"));
             run(Command::new("tar")
                 .current_dir(&out)

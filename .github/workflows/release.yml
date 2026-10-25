@@ -13,7 +13,6 @@ jobs:
                 include:
                     - { os: windows-latest, dist: windows }
                     - { os: macos-latest, dist: macos }
-                    - { os: macos-13, dist: macos }
                     - { os: ubuntu-22.04, dist: linux }
 
         runs-on: ${{ matrix.os }}
